@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<script src="https://unpkg.com/axios@0.27.2/dist/axios.min.js" type="text/javascript"></script>
+<noscript>Sorry, your browser does not support JavaScript!</noscript>
+<html>
+    <head>
+        <title>Usuário Geral</title>
+    </head>
+    <body>
+        <h1>Usuário Geral</h1>
+            <p>Olá!</p>
+
+        <form name="inscricaoPessoa" id="form">
+            <label for="pessoaPrimeiroNome">Primeiro nome:</label><br>
+            <input type="text" id="pessoaPrimeiroNome" name="pessoaPrimeiroNome"><br>
+            <label for="pessoaSobrenome">Sobrenome:</label><br>
+            <input type="text" id="pessoaSobrenome" name="pessoaSobrenome"><br>
+            <label for="pais">País:</label><br>
+            <input type="text" id="pais" name="pais"><br>
+            <input type="submit"/>		
+        </form>
+
+        <form name="leituraCandidatoAPalestrante" id="formLeitura">
+            <input type="submit" value="GET"/>
+        </form>
+
+        <p id = "json_to_html" style = "font-size: 15px; font-weight: bold;"> </p>
+    </body>
+</html>
+<script>
+    let url = "http://localhost:3000"
+
+    //CREATE
+    function submitForm(event){
+        event.preventDefault();
+        let inscricaoPessoa = document.forms.inscricaoPessoa;
+        let primeiroNome = inscricaoPessoa.pessoaPrimeiroNome.value;
+        let sobrenome = inscricaoPessoa.pessoaSobrenome.value;
+        let pais = inscricaoPessoa.pais.value;
+
+        let body = {
+            primeiroNome: primeiroNome,
+            sobrenome: sobrenome,
+            pais: pais
+        }
+        axios.post(`${url}/pessoa/registrar`, body=body)
+        .then(res => {})
+    }
+    
+    let form = document.getElementById("form");
+    console.log(form);
+    form.addEventListener("submit", submitForm);
+
+     //READ
+     function getPessoa(event){
+        event.preventDefault();
+
+        axios.get(`${url}/pessoa/buscar`)
+        .then(res => {
+            var json_to_html_tag = document.getElementById("json_to_html");
+            for (var i = 0; i < res.data.length; i++){
+                var my_json = JSON.stringify(res.data[i]);
+                let parsed_obj = JSON.parse(my_json);
+                console.log(parsed_obj);
+                json_to_html_tag.innerHTML =  "Converting JSON to HTML <br><br>" + 
+                                "Primeiro Nome: " + parsed_obj['primeironome'] + 
+                                "<br>Sobrenome: " + parsed_obj['sobrenome'] +
+                                "<br>País: " + parsed_obj['pais'];
+            }              
+        })
+        .catch(err =>{
+            if(err.response){
+                console.log("client received an error response (5xx, 4xx)");
+            } else if (err.request){
+                console.log("client never received a response, or request never left ");
+            } else {
+                console.log("anything else");
+            }
+        });
+        
+    }
+
+    let formLeitura = document.getElementById("formLeitura");
+    //console.log(formLeitura);
+    formLeitura.addEventListener("submit", getPessoa);
+
+</script>

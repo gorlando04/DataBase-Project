@@ -1,0 +1,129 @@
+body {
+    margin: 0px;
+    background-color: whitesmoke;
+}
+
+h1 {
+    color: #006699;
+    text-align: center;
+}
+
+a:link, a:visited, a:hover {
+    background: #006699;
+    color: white;
+    padding: 8px;
+    margin: 8px;
+}
+
+#cabecalho {
+    padding: 10px 20px;
+    background-color: #006699;
+    color: white;
+    text-align: center;
+}
+
+#cabecalho table {
+    color: white;
+}
+
+#cabecalho a:link, #cabecalho a:visited, #cabecalho a:hover {
+    padding: 5px 5px;
+    color: white;
+}
+
+#cabecalho a:active {
+    color: black;
+}
+
+#tabela {
+    border: 2px solid #006699;
+    border-collapse: collapse;
+    margin: 0 auto;
+    text-align: left;
+}
+
+#tabela th {
+    border: 1px solid #ccc;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: #006699;
+    color: white;
+}
+
+#tabela tr:nth-child(even){
+    background-color: #e5eff4;
+}
+
+#tabela tr.cancelado {
+    background-color: #f48f85;
+}
+
+#tabela td {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+#tabela tr:hover {
+    background-color: #ddd;
+}
+
+#filtro {
+    padding: 8px;
+    background-color: #006699;
+    color: white;
+}
+
+#filtro input {
+    background-color: whitesmoke;
+    padding-left: 8px;
+    padding-right: 8px;
+    color: black;
+}
+
+#loginDiv {
+    text-align: center;
+    padding: 70px 0px;;
+}
+
+#loginForm {
+    padding: 70px 70px;
+    background-color: #006699;
+    color: white;
+    display: inline-block;
+    text-align: left;
+}
+
+#formulario table{
+    border-collapse: collapse;
+    margin: 0 auto;
+    text-align: left;
+}
+
+#formulario td {
+    border-top: 1px solid #006699;
+    border-bottom: 1px solid #006699;
+    padding: 8px;
+}
+
+#submit {
+    background-color: #006699;
+    color: white;
+}
+#compra input{
+    display: inline-block;
+    padding: 16px;
+    background: #006699;
+    color: white;
+}
+
+#erro ul{
+    background-color: #f48f85;
+    text-align: center;
+    font-size: 24px;
+    list-style-type: none;
+    padding: 8px;
+  }

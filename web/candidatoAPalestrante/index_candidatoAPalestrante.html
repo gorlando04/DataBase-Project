@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<script src="https://unpkg.com/axios@0.27.2/dist/axios.min.js" type="text/javascript"></script>
+<noscript>Sorry, your browser does not support JavaScript!</noscript>
+<html>
+    <head>
+        <title>Candidato a Palestrante</title>
+    </head>
+    <body>
+        <h1>Candidato a Palestrante</h1>
+            <p>Olá!</p>
+
+        <form name="inscricaoCandidadoAPalestrante" id="formInscricao">
+            <!-- CANDIDATOAPALESTRANTE-->
+            <label for="emailPrincipal">Email Principal:</label><br>
+            <input type="text" id="emailPrincipal" name="emailPrincipal"><br>
+            <label for="pessoaQueIndicou">pessoa que Indicou:</label><br>
+            <input type="text" id="pessoaQueIndicou" name="pessoaQueIndicou"><br>
+            <label for="miniCurriculo">Mini Currículo:</label><br>
+            <input type="text" id="miniCurriculo" name="miniCurriculo"><br>
+            <!-- DESCRICAOCANDIDATO -->
+            <label for="areaDeAtuacao">Área de Atuação:</label><br>
+            <input type="text" id="areaDeAtuacao" name="areaDeAtuacao"><br>
+            <label for="nome">Nome:</label><br>
+            <input type="text" id="nome" name="nome"><br>
+            <label for="foto">Foto:</label><br>
+            <input type="text" id="foto" name="foto"><br>
+            <!-- LINKSTRABALHOSCANDPALEST -->
+            <div class="trabalhos">
+                <button id="btnAdicionarTrabalhos">
+                📝Adicionar trabalhos
+                </button>
+                <div class="container" id="trabalhosContainer">
+                </div>
+                <button class="green" id="btnCapturarDados">
+                ✅ Capturar Dados
+                </button>
+            </div>
+            <pre id="containerDados">
+                
+            </pre>
+            
+            <!-- SEND -->
+            <input type="submit" value="POST"/>		
+        </form>
+
+        <form name="leituraCandidatoAPalestrante" id="formLeitura">
+            <input type="submit" value="GET"/>
+        </form>
+
+        <p id = "json_to_html" style = "font-size: 15px; font-weight: bold;"> </p>
+    </body>
+</html>
+<script>
+    let url = "http://localhost:3000"
+
+    //CREATE
+    function submitForm(event){
+        event.preventDefault();
+        let inscricaoCandidadoAPalestrante = document.forms.inscricaoCandidadoAPalestrante;
+        //CANDIDATOAPALESTRANTE
+        let emailPrincipal = inscricaoCandidadoAPalestrante.emailPrincipal.value;
+        let pessoaQueIndicou = inscricaoCandidadoAPalestrante.pessoaQueIndicou.value;
+        let miniCurriculo = inscricaoCandidadoAPalestrante.miniCurriculo.value;
+        //DESCRICAOCANDIDATO
+        let areaDeAtuacao = inscricaoCandidadoAPalestrante.areaDeAtuacao.value;
+        let nome = inscricaoCandidadoAPalestrante.nome.value;
+        let foto = inscricaoCandidadoAPalestrante.foto.value;
+        //LINKSTRABALHOSCANDPALEST
+        var trabalhos = [{
+            links: "Seu link aqui."
+        }];
+        function carregarTrabalhos(){
+            let trabalhosContainer = document.querySelector('#trabalhosContainer');
+            //console.log(trabalhos)
+            trabalhosContainer.innerHTML = '';
+            trabalhos.forEach((el) => {
+                let links = el.links;
+                let trabalhoContainer =    `<div class='trabalhos'>
+                                                <input class="links" placeholder="Digite o(s) link(s)" type="text" value="${links}"/>
+                                                <div class="action">
+                                                    <a href="#" class="salvar">💾</a>
+                                                    <a href="#" class="remover">❌</a>
+                                                </div>
+										    </div>`;
+                trabalhosContainer.innerHTML += trabalhoContainer;
+            });
+            salvarTrabalhos();
+            removerTrabalhos();
+            //travarOutros(false);
+        }
+
+        function removerTrabalhos(){
+            document.querySelectorAll('#trabalhosContainer .remover').forEach((el, i) => {
+                el.addEventListener('click', () => {
+                    trabalhos.splice(i, 1);
+                    carregarTrabalhos();
+                });
+            });
+
+        }
+
+        function adicionarTrabalhos(){
+            trabalhos.push({links: ""});
+            carregarTrabalhos();
+            //travarOutros(document.querySelector('trabalhosContainer > div:last-child'));
+        }
+
+        function salvarTrabalhos(){
+            document.querySelectorAll('#trabalhosContainer .salvar').forEach((el, i) => {
+                el.addEventListener('click', () => {
+                    let link = el.parentElement.parentElement.querySelector('.links').value;
+                    if(!link.length){
+                        alert("O campo links precisa ser preenchido para salvar.");
+                        return false;
+                    }
+
+                    trabalhos.splice(i, 1, {links: link});
+                    carregarTrabalhos();
+                    //travarOutros(false);
+                });
+            });
+        }
+
+        function travarOutros(element){
+            if(element == false){
+                document.querySelectorAll(".trabalhos button, .trabalhos .container > div").forEach((el) => {
+                    el.classList.remove("disabled");
+                });
+                document.querySelector("#containerDados").innerHTML = "";
+                return false;
+            }
+            document.querySelectorAll(".trabalhos button, .trabalhos .container > div").forEach((el) => {
+                if(el != element){
+                    el.classList.add("disabled");
+                }
+            });
+        }
+
+        //init
+        document.querySelector("#btnAdicionarTrabalhos").addEventListener("click", adicionarTrabalhos);
+        carregarTrabalhos();
+
+        //capturarDados
+        document.querySelector("#btnCapturarDados").addEventListener("click", () => {
+            document.querySelector("#containerDados").innerHTML = JSON.stringify(trabalhos, undefined, 4);
+        });
+
+        let body = {
+            //CANDIDATOAPALESTRANTE
+            emailPrincipal: emailPrincipal,
+            pessoaQueIndicou: pessoaQueIndicou,
+            miniCurriculo: miniCurriculo,
+            //DESCRICAOCANDIDATO
+            areaDeAtuacao: areaDeAtuacao,
+            nome: nome,
+            foto: foto
+        }
+        axios.post(`${url}/candidatoAPalestrante/registrar`, body=body)
+        .then(res => {})
+        .catch(err =>{
+            if(err.response){
+                console.log("client received an error response (5xx, 4xx)");
+            } else if (err.request){
+                console.log("client never received a response, or request never left ");
+            } else {
+                console.log("anything else");
+            }
+        });
+    }
+
+    let formInscricao = document.getElementById("formInscricao");
+    //console.log(formInscricao);
+    formInscricao.addEventListener("submit", submitForm);
+
+    //READ
+    function getCandidatoAPalestrante(event){
+        event.preventDefault();
+        axios.get(`${url}/candidatoAPalestrante/buscar`)
+        .then(res => {
+            var json_to_html_tag = document.getElementById("json_to_html");
+            for (var i = 0; i < res.data.length; i++){
+                var my_json = JSON.stringify(res.data[i]);
+                let parsed_obj = JSON.parse(my_json);
+                console.log(parsed_obj);
+                json_to_html_tag.innerHTML =  "Último Candidato A Palestrante Cadastrado:<br><br>" + 
+                                "Email Principal: " + parsed_obj['emailprincipal'] + 
+                                "<br>Pessoa que Indicou: " + parsed_obj['pessoaqueindicou'] +
+                                "<br>Mini Curriculo: " + parsed_obj['minicurriculo'] +
+                                "<br>Área de Atuação: " + parsed_obj['areadeatuacao'] +
+                                "<br>Nome: " + parsed_obj['nome'] +
+                                "<br>Foto: " + parsed_obj['foto'];
+            }
+        })
+        .catch(err =>{
+            if(err.response){
+                console.log("client received an error response (5xx, 4xx)");
+            } else if (err.request){
+                console.log("client never received a response, or request never left ");
+            } else {
+                console.log("anything else");
+            }
+        });
+        
+    }
+
+    let formLeitura = document.getElementById("formLeitura");
+    //console.log(formLeitura);
+    formLeitura.addEventListener("submit", getCandidatoAPalestrante);
+
+</script>

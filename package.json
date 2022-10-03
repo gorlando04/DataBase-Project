@@ -1,0 +1,19 @@
+{
+  "name": "projetopibd",
+  "version": "1.0.0",
+  "description": "\"Projeto e Implementação de Banco de Dados\"  - Consiste na implementação de um sistema de controle de eventos científicos",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MatosAugusto/ProjetoPIBD.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MatosAugusto/ProjetoPIBD/issues"
+  },
+  "homepage": "https://github.com/MatosAugusto/ProjetoPIBD#readme"
+}
